@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    network_mode: "host"
+    restart: always
+    ports:
+      - 32400:32400
+    environment:
+      - VERSION=latest 
+      - PUID=1001 
+      - PGID=1001
+      - TZ=Europe/Istanbul
+    volumes:
+      - /home/mra/MediaServer/plex/config:/config:shared  
+      - /home/mra/MediaServer/tvshows:/data/tvshows:shared  
+      - /home/mra/MediaServer/movies:/data/movies:shared  
+      - /home/mra/MediaServer/plex/transcode:/transcode:shared
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    network_mode: "host"
+    restart: always
+    ports:
+      - 8989:8989
+    environment:
+      - PUID=1001 
+      - PGID=1001
+      - TZ=Europe/Istanbul
+    volumes: 
+      - /home/mra/MediaServer/sonarr/config:/config:shared 
+      - /home/mra/MediaServer/tvshows:/tvshows:shared 
+      - /home/mra/MediaServer/deluge/downloads:/downloads:shared 
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    network_mode: "host"
+    restart: always
+    ports:
+      - 7878:7878
+    environment:
+      - PUID=1001 
+      - PGID=1001
+      - TZ=Europe/Istanbul
+    volumes: 
+      - /home/mra/MediaServer/radarr/config:/config:shared 
+      - /home/mra/MediaServer/movies:/movies:shared 
+      - /home/mra/MediaServer/deluge/downloads:/downloads:shared 
+      - /etc/localtime:/etc/localtime:ro 
+
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    network_mode: "host"
+    restart: always
+    ports:
+      - 8112:8112
+    environment:
+      - PUID=1001 
+      - PGID=1001
+      - TZ=Europe/Istanbul
+      - UMASK_SET=022 
+    volumes: 
+      - /home/mra/MediaServer/deluge/downloads:/downloads:shared  
+      - /home/mra/MediaServer/deluge/config:/config:shared  
