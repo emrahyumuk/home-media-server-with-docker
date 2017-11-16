@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-
+  
   plex:
     image: linuxserver/plex
     container_name: plex
@@ -13,12 +13,13 @@ services:
       - VERSION=latest 
       - PUID=1001 
       - PGID=1001
-      - TZ=Europe/Istanbul
+      - TZ=${TIME_ZONE}
     volumes:
-      - /home/mra/MediaServer/plex/config:/config:shared  
-      - /home/mra/MediaServer/tvshows:/data/tvshows:shared  
-      - /home/mra/MediaServer/movies:/data/movies:shared  
-      - /home/mra/MediaServer/plex/transcode:/transcode:shared
+      - ${SERVER_PATH}/MediaServer/plex/config:/config:shared  
+      - ${SERVER_PATH}/MediaServer/tvshows:/data/tvshows:shared  
+      - ${SERVER_PATH}/MediaServer/movies:/data/movies:shared  
+      - ${SERVER_PATH}/MediaServer/plex/transcode:/transcode:shared
+    env_file: .env
 
   sonarr:
     image: linuxserver/sonarr
@@ -30,11 +31,12 @@ services:
     environment:
       - PUID=1001 
       - PGID=1001
-      - TZ=Europe/Istanbul
+      - TZ=${TIME_ZONE}
     volumes: 
-      - /home/mra/MediaServer/sonarr/config:/config:shared 
-      - /home/mra/MediaServer/tvshows:/tvshows:shared 
-      - /home/mra/MediaServer/deluge/downloads:/downloads:shared 
+      - ${SERVER_PATH}/MediaServer/sonarr/config:/config:shared 
+      - ${SERVER_PATH}/MediaServer/tvshows:/tvshows:shared 
+      - ${SERVER_PATH}/MediaServer/deluge/downloads:/downloads:shared
+    env_file: .env
 
   radarr:
     image: linuxserver/radarr
@@ -46,12 +48,13 @@ services:
     environment:
       - PUID=1001 
       - PGID=1001
-      - TZ=Europe/Istanbul
+      - TZ=${TIME_ZONE}
     volumes: 
-      - /home/mra/MediaServer/radarr/config:/config:shared 
-      - /home/mra/MediaServer/movies:/movies:shared 
-      - /home/mra/MediaServer/deluge/downloads:/downloads:shared 
+      - ${SERVER_PATH}/MediaServer/radarr/config:/config:shared 
+      - ${SERVER_PATH}/MediaServer/movies:/movies:shared 
+      - ${SERVER_PATH}/MediaServer/deluge/downloads:/downloads:shared 
       - /etc/localtime:/etc/localtime:ro 
+    env_file: .env
 
   deluge:
     image: linuxserver/deluge
@@ -63,8 +66,9 @@ services:
     environment:
       - PUID=1001 
       - PGID=1001
-      - TZ=Europe/Istanbul
+      - TZ=${TIME_ZONE}
       - UMASK_SET=022 
     volumes: 
-      - /home/mra/MediaServer/deluge/downloads:/downloads:shared  
-      - /home/mra/MediaServer/deluge/config:/config:shared  
+      - ${SERVER_PATH}/MediaServer/deluge/downloads:/downloads:shared  
+      - ${SERVER_PATH}/MediaServer/deluge/config:/config:shared  
+    env_file: .env
